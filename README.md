@@ -45,14 +45,6 @@ let res = tern::t!(bar > foo ? "bar is greater" : "bar is lesser");
 assert_eq!(res, "bar is greater");
  ```
 
-A more complex example needs to be wrapped in parentheses.
-```rust
-let v = vec![1, 3, 5, 7];
-let res = t!((*v.get(0).context("no first")?) == 1 ? "equals 1" : "not 1");
-
-assert_eq!(res, "equals 1");
-```
-
 A nested example.
 ```rust
 let a = 40;
@@ -61,6 +53,56 @@ let c = 20;
 
 let res = t!(b > a ? b : t!(c > b ? c : a));
 assert_eq!(res, a);
+
+let res = t!(
+    b == a ? "b == a" :
+ t!(b >  a ? "b > a"  :
+ t!(c >  b ? "c > b"  :
+             "other"
+)));
+assert_eq!(res, "other");
+```
+
+A more complex example needs to be wrapped in parentheses.
+```rust
+let v = vec![1, 3, 5, 7];
+let res = t!((*v.get(0).context("no first")?) == 1 ? "equals 1" : "not 1");
+
+assert_eq!(res, "equals 1");
+```
+
+Some ridiculous examples taken from the tests.
+```rust
+let v = vec![10, 3, 5, 7];
+
+let res = t!(
+    (*v.get(0).context("no first")? as inner::Test) == inner::NUM
+    ? "equals 10"
+    : "not 10"
+);
+assert_eq!(res, "equals 10");
+
+let res = t!(
+    (*v.get(0).context("no first")?) == <inner::Test as inner::Trait1>::new()
+    ? "equals 10"
+    : "not 10"
+);
+assert_eq!(res, "equals 10");
+
+mod inner {
+    pub(super) type Test = usize;
+    pub(super) const NUM: usize = 10;
+
+    pub(super) trait Trait1 {
+        fn new() -> usize;
+    }
+
+    impl Trait1 for Test {
+        fn new() -> usize {
+            10
+        }
+    }
+}
 ```
 
 ## Goals

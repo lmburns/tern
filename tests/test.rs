@@ -35,6 +35,14 @@ fn nested() {
 
     let res = t!(b>a?b:t!(c>b?c:a));
     assert_eq!(res, a);
+
+    let res = t!(
+        b == a ? "b == a" :
+     t!(b >  a ? "b > a"  :
+     t!(c >  b ? "c > b"  :
+                 "other"
+    )));
+    assert_eq!(res, "other");
 }
 
 #[test]
