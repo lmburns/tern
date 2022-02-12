@@ -42,6 +42,9 @@ use syn::{
     Token,
 };
 
+// Recursive could possibly be implemented with something like
+// Vec<(Punctuated<Expr, Token![?]>, Punctuated<Expr, Token[:]>)>
+
 /// The conditional statement
 struct Ternary {
     condition: Expr,
@@ -63,8 +66,9 @@ impl Parse for Ternary {
             let mut tokens = vec![];
 
             // TODO: Report error `expected a '?'` here
+
             while !input.peek(Token![?]) || (input.peek(Token![?]) && input.peek2(Token![?])) {
-                tokens.push(input.parse::<TokenTree>()?);
+                tokens.push(TokenTree::parse(input)?);
             }
 
             syn::parse2(tokens.into_iter().collect())
@@ -78,8 +82,10 @@ impl Parse for Ternary {
             let mut tokens = vec![];
 
             // TODO: Report error `expected a ':'` here
+
+            // Statement after `||` is for paths
             while !input.peek(Token![:]) || input.peek(Token![::]) {
-                tokens.push(input.parse::<TokenTree>()?);
+                tokens.push(TokenTree::parse(input)?);
             }
 
             syn::parse2(tokens.into_iter().collect())

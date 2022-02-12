@@ -47,3 +47,42 @@ fn complex_type() -> Result<()> {
 
     Ok(())
 }
+
+#[test]
+fn paths() -> Result<()> {
+    let v = vec![10, 3, 5, 7];
+
+    let res = t!((*v.get(0).context("no first")?) == inner::NUM ? "equals 10" : "not 10");
+    assert_eq!(res, "equals 10");
+
+    let res = t!(
+        (*v.get(0).context("no first")? as inner::Test) == inner::NUM
+        ? "equals 10"
+        : "not 10"
+    );
+    assert_eq!(res, "equals 10");
+
+    let res = t!(
+        (*v.get(0).context("no first")?) == <inner::Test as inner::Trait1>::new()
+        ? "equals 10"
+        : "not 10"
+    );
+    assert_eq!(res, "equals 10");
+
+    Ok(())
+}
+
+mod inner {
+    pub(super) type Test = usize;
+    pub(super) const NUM: usize = 10;
+
+    pub(super) trait Trait1 {
+        fn new() -> usize;
+    }
+
+    impl Trait1 for Test {
+        fn new() -> usize {
+            10
+        }
+    }
+}
