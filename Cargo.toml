@@ -1,0 +1,20 @@
+[package]
+name = "tern"
+version = "0.1.0"
+readme = "README.md"
+repository = "https://github.com/lmbunrs/tern"
+authors = ["Lucas Burns <burnsac@me.com>"]
+description = "Procedural macro to emulate a ternary expression with C-like syntax"
+keywords = ["ternary", "macro"]
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+quote = "1"
+proc-macro2 = "1.0.36"
+syn = { version = "1.0", features = ["full", "parsing", "proc-macro"] }
+
+[dev-dependencies]
+anyhow = "1.0"
