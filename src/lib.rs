@@ -5,7 +5,7 @@
 //! # Goals
 //! There are two goals of the project:
 //!  1. Report better errors than 'unexpected end of input, expected a token
-//!     tree`
+//!     tree'
 //!  2. Make the macro recursive itself. It already allows nested macros,
 //!     but I would like for this functionality to be in place without having
 //!     to use more than one macro
