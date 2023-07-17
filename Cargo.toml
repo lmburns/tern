@@ -1,6 +1,6 @@
 [package]
 name = "tern"
-version = "0.1.0"
+version = "0.1.1"
 readme = "README.md"
 repository = "https://github.com/lmbunrs/tern"
 authors = ["Lucas Burns <burnsac@me.com>"]
@@ -12,9 +12,9 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
-quote = "1.0.23"
-proc-macro2 = "1.0.51"
-syn = { version = "1.0.109", features = ["full", "parsing", "proc-macro"] }
+quote = "1.0.31"
+proc-macro2 = "1.0.66"
+syn = { version = "2.0.26", features = ["full", "parsing", "proc-macro"] }
 
 [dev-dependencies]
-anyhow = "1.0.69"
+anyhow = "1.0.72"
